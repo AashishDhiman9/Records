@@ -83,14 +83,22 @@ downloadPDFButton.addEventListener('click', () => {
 
     const headers = ["Date", "Income Source", "Sales", "Expenditure Details", "Expenditure", "Profit"];
     const filteredData = records.filter(record => !record.deleted); // Filter out deleted records
+    let previousDate = null;
     const data = filteredData.map((record, index) => {
         // Check if it's the first record or if the date has changed from the previous record
-        if (index === 0 || record.date !== filteredData[index - 1].date) {
-            // Bold the date
-            return [ { content: record.date, styles: { fontStyle: 'bold' } }, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit ];
+        const currentRow = [];
+        if (record.date !== previousDate) {
+            currentRow.push({ content: record.date, styles: { fontStyle: 'bold' } });
+            previousDate = record.date;
         } else {
-            return [record.date, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit];
+            currentRow.push('');
         }
+        currentRow.push(record.incomeSource);
+        currentRow.push(record.sales);
+        currentRow.push(record.expenditureDetails);
+        currentRow.push(record.expenditure);
+        currentRow.push(record.profit);
+        return currentRow;
     });
 
     doc.autoTable({
@@ -100,6 +108,7 @@ downloadPDFButton.addEventListener('click', () => {
 
     doc.save('khata_record.pdf');
 });
+
 
     
     // Rest of your code...
