@@ -1,97 +1,74 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('recordForm');
-    const recordsTableBody = document.getElementById('recordsTableBody');
-    const totalSales = document.getElementById('totalSales');
-    const totalExpenditure = document.getElementById('totalExpenditure');
-    const totalProfit = document.getElementById('totalProfit');
-    const downloadPDFButton = document.getElementById('downloadPDF');
-    const reportForm = document.getElementById('reportForm');
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #333;
+}
 
-    let records = [];
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        
-        const date = document.getElementById('date').value;
-        const incomeSource = document.getElementById('incomeSource').value;
-        const sales = parseFloat(document.getElementById('sales').value);
-        const expenditureDetails = document.getElementById('expenditureDetails').value || 'N/A';
-        const expenditure = parseFloat(document.getElementById('expenditure').value) || 0;
-        const profit = sales - expenditure;
+main {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-        const record = { date, incomeSource, sales, expenditureDetails, expenditure, profit };
-        records.push(record);
-        updateTable();
-        updateTotals();
-    });
+section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-    function updateTable() {
-        recordsTableBody.innerHTML = '';
-        records.forEach(record => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${record.date}</td>
-                <td>${record.incomeSource}</td>
-                <td>${record.sales}</td>
-                <td>${record.expenditureDetails}</td>
-                <td>${record.expenditure}</td>
-                <td>${record.profit}</td>
-            `;
-            recordsTableBody.appendChild(row);
-        });
-    }
+form {
+    display: flex;
+    flex-direction: column;
+}
 
-    function updateTotals() {
-        const salesSum = records.reduce((sum, record) => sum + record.sales, 0);
-        const expenditureSum = records.reduce((sum, record) => sum + record.expenditure, 0);
-        const profitSum = salesSum - expenditureSum;
+form label {
+    margin: 10px 0 5px;
+}
 
-        totalSales.textContent = salesSum;
-        totalExpenditure.textContent = expenditureSum;
-        totalProfit.textContent = profitSum;
-    }
+form input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
 
-    downloadPDFButton.addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        doc.text('Nitin General Store - Report', 10, 10);
+button:hover {
+    background-color: #45a049;
+}
 
-        const headers = ["Date", "Income Source", "Sales", "Expenditure Details", "Expenditure", "Profit"];
-        const data = records.map(record => [record.date, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit]);
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
 
-        doc.autoTable({
-            head: [headers],
-            body: data
-        });
+table, th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
 
-        doc.save('khata_record.pdf');
-    });
-
-    reportForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-
-        const filteredRecords = records.filter(record => record.date >= startDate && record.date <= endDate);
-
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text(`Expenditure Report - ${startDate} to ${endDate}`, 10, 10);
-
-        let y = 20;
-        filteredRecords.forEach(record => {
-            doc.text(`Date: ${record.date}`, 10, y);
-            doc.text(`Income Source: ${record.incomeSource}`, 10, y + 10);
-            doc.text(`Sales: ${record.sales}`, 10, y + 20);
-            doc.text(`Expenditure Details: ${record.expenditureDetails}`, 10, y + 30);
-            doc.text(`Expenditure: ${record.expenditure}`, 10, y + 40);
-            doc.text(`Profit: ${record.profit}`, 10, y + 50);
-            y += 60;
-        });
-
-        doc.save(`expenditure_report_${startDate}_to_${endDate}.pdf`);
-    });
-
-});
+th {
+    background-color: #f9f9f9;
+}
