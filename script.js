@@ -67,6 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update local storage
         updateLocalStorage();
+        form.reset();
+
+    // Remove 'required' attribute from income source field
+    document.getElementById('incomeSource').removeAttribute('required');
     });
 
     // Function to handle PDF download
