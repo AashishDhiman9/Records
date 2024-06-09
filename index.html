@@ -104,7 +104,7 @@
                         <td>${record.expenditureDetails}</td>
                         <td>${record.expenditure}</td>
                         <td>${record.profit}</td>
-                        <td><button onclick="deleteRecord(${index})">Delete</button></td>
+                        <td><button class="deleteButton" data-index="${index}">Delete</button></td>
                     `;
                     recordsTableBody.appendChild(row);
                 });
@@ -147,6 +147,17 @@
                 updateLocalStorage();
             });
 
+            // Function to handle delete button clicks
+            recordsTableBody.addEventListener('click', (event) => {
+                if (event.target.classList.contains('deleteButton')) {
+                    const index = event.target.getAttribute('data-index');
+                    records.splice(index, 1); // Remove
+                    updateTable(); // Update the table
+                    updateTotals(); // Update totals
+                    updateLocalStorage(); // Update local storage
+                }
+            });
+
             // Function to handle PDF download
             downloadPDFButton.addEventListener('click', () => {
                 const { jsPDF } = window.jspdf;
@@ -165,16 +176,9 @@
                 doc.save('khata_record.pdf');
             });
 
-            // Function to delete a record
-            function deleteRecord(index) {
-                console.log('Deleting record at index:', index); // Debugging log
-                console.log('Records before deletion:', records); // Debugging log
-                records.splice(index, 1); // Remove the record from the array
-                console.log('Records after deletion:', records); // Debugging log
-                updateTable(); // Update the table
-                updateTotals(); // Update totals
-                updateLocalStorage(); // Update local storage
-            }
+            // Initialize the table and totals
+            updateTable();
+            updateTotals();
         });
     </script>
 </body>
