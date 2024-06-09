@@ -112,4 +112,3 @@ downloadPDFButton.addEventListener('click', () => {
 
     
     // Rest of your code...
-});
