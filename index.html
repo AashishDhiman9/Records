@@ -167,7 +167,10 @@
 
             // Function to delete a record
             function deleteRecord(index) {
+                console.log('Deleting record at index:', index); // Debugging log
+                console.log('Records before deletion:', records); // Debugging log
                 records.splice(index, 1); // Remove the record from the array
+                console.log('Records after deletion:', records); // Debugging log
                 updateTable(); // Update the table
                 updateTotals(); // Update totals
                 updateLocalStorage(); // Update local storage
