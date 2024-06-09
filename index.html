@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nitin General Store</title>
     <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
     <header>
@@ -151,7 +150,7 @@
             recordsTableBody.addEventListener('click', (event) => {
                 if (event.target.classList.contains('deleteButton')) {
                     const index = event.target.getAttribute('data-index');
-                    records.splice(index, 1); // Remove
+                    records.splice(index, 1); // Remove the record from the array
                     updateTable(); // Update the table
                     updateTotals(); // Update totals
                     updateLocalStorage(); // Update local storage
@@ -176,7 +175,7 @@
                 doc.save('khata_record.pdf');
             });
 
-            // Initialize the table and totals
+            // Initialize the table and totals when the page loads
             updateTable();
             updateTotals();
         });
