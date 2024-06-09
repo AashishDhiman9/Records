@@ -74,22 +74,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Function to handle PDF download
-    downloadPDFButton.addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+    // Function to handle PDF download
+downloadPDFButton.addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-        doc.text('Nitin General Store - Report', 10, 10);
+    doc.text('Nitin General Store - Report', 10, 10);
 
-        const headers = ["Date", "Income Source", "Sales", "Expenditure Details", "Expenditure", "Profit"];
-        const data = records.map(record => [record.date, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit]);
-
-        doc.autoTable({
-            head: [headers],
-            body: data
-        });
-
-        doc.save('khata_record.pdf');
+    const headers = ["Date", "Income Source", "Sales", "Expenditure Details", "Expenditure", "Profit"];
+    const filteredData = records.filter(record => !record.deleted); // Filter out deleted records
+    const data = filteredData.map((record, index) => {
+        // Check if it's the first record or if the date has changed from the previous record
+        if (index === 0 || record.date !== filteredData[index - 1].date) {
+            // Bold the date
+            return [ { content: record.date, styles: { fontStyle: 'bold' } }, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit ];
+        } else {
+            return [record.date, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit];
+        }
     });
 
+    doc.autoTable({
+        head: [headers],
+        body: data
+    });
+
+    doc.save('khata_record.pdf');
+});
+
+    
     // Rest of your code...
 });
