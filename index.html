@@ -21,7 +21,7 @@
                 <input type="text" id="incomeSource">
 
                 <label for="sales">Sales Amount:</label>
-                <input type="number" id="sales" >
+                <input type="number" id="sales" required>
 
                 <label for="expenditureDetails">Expenditure Details:</label>
                 <input type="text" id="expenditureDetails">
@@ -144,6 +144,12 @@
 
                 // Update local storage
                 updateLocalStorage();
+
+                // Reset form
+                form.reset();
+
+                // Remove 'required' attribute from income source field
+                document.getElementById('incomeSource').removeAttribute('required');
             });
 
             // Function to handle delete button clicks
@@ -165,7 +171,15 @@
                 doc.text('Nitin General Store - Report', 10, 10);
 
                 const headers = ["Date", "Income Source", "Sales", "Expenditure Details", "Expenditure", "Profit"];
-                const data = records.map(record => [record.date, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit]);
+                const data = records.map((record, index) => {
+                    // Check if it's the first record or if the date has changed from the previous record
+                    if (index === 0 || record.date !== records[index - 1].date) {
+                        // Bold the date
+                        return [ { content: record.date, styles: { fontStyle: 'bold' } }, record.incomeSource, record
+                                                    } else {
+                        return [record.date, record.incomeSource, record.sales, record.expenditureDetails, record.expenditure, record.profit];
+                    }
+                });
 
                 doc.autoTable({
                     head: [headers],
@@ -175,10 +189,9 @@
                 doc.save('khata_record.pdf');
             });
 
-            // Initialize the table and totals when the page loads
-            updateTable();
-            updateTotals();
+            // Rest of your code...
         });
     </script>
 </body>
 </html>
+
